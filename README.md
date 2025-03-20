@@ -27,11 +27,11 @@ All endpoints are protected by JWT bearer token authentication.
 
 Developers can generate valid JWTs using jwt.io's [JWT Encoder](https://jwt.io/). (Note: make sure you select __JWT Encoder__ as it defaults to JWT Decoder)
 
-\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 
 __IMPORTANT__: PLEASE USE THE FOLLOWING SECRET WHEN ENCODING A JWT: `carton-caps-secret-for-code-challenge`
 
-\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 
 
 ### Example JWT Payload
@@ -121,15 +121,24 @@ docker rm invite-container
 
 ### Considerations for new API endpoints
 - How will existing users create new referrals using their existing referral code?
+
 Existing users will create new referrals using their existing referral code by POSTing to the Invite API's /referrals endpoint with the required request information. 
 Their existing referral code will be fetched from the Profile Management API.
+
 - How will the app generate referral links for the Share feature?
+
 The app will generate referral links for the Share feature by GETing /referral-link from the Invite API, which allows application administrators to reconfigure the referral link without having to push an update to the mobile app (e.g. introducing new query params).
+
 - How will existing users check the status of their referrals?
+
 Existing users will check the status of their referrals by GETing /redeemed-referrals from the Invite API, which provides them with the essential information to display on their mobile device.
+
 - How will the app know where to direct new users after they install the app via a referral?
+
 The app will know where to direct new users after they install the app via a referral by utilizing the shareable deferred deep links.
+
 - Since users may eventually earn rewards for referrals, should we take extra steps to mitigate abuse?
+
 We should absolutely take extra steps to mitigate abuse. Future updates to the Invite API should focus on supporting additional UTM params (e.g. medium, campaign, etc.), IP address tracking, rate limiting requests, capping no. of referrals per day/week/month, potentially include geolocation data if available, anamoly detection, device fingerprinting if available, velocity checking and many, many more enhancements for robust security.
 
 ### Other Considerations
