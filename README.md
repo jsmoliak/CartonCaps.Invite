@@ -122,8 +122,7 @@ docker rm invite-container
 ### Considerations for new API endpoints
 - How will existing users create new referrals using their existing referral code?
 
-Existing users will create new referrals using their existing referral code by POSTing to the Invite API's /referrals endpoint with the required request information. 
-Their existing referral code will be fetched from the Profile Management API.
+Existing users will create new referrals using their existing referral code by 1) fetching a referral link from the Invite /referral-link endpoint and using it to Share with a friend and 2) following a Share action, POSTing to the Invite API's /referrals endpoint with the required request information. Their existing referral code will be fetched from the Profile Management API.
 
 - How will the app generate referral links for the Share feature?
 
