@@ -70,9 +70,11 @@ namespace CartonCaps.Invite.API.Controllers
         /// <param name="cancellationToken">A token that can be used to cancel the asynchronous operation.</param>
         /// <returns>An IActionResult representing the result of the creation.</returns>
         /// <response code="201">Returned if the referral is created successfully.</response>
+        /// <response code="400">Returned if the referral request is invalid.</response>
         /// <response code="401">Returned if the user is unauthorized.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Post(ReferralRequest referralDto, CancellationToken cancellationToken)
         {

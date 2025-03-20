@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
 
 namespace CartonCaps.Invite.API.Filters
 {
@@ -32,13 +31,7 @@ namespace CartonCaps.Invite.API.Filters
 
                 var exception = context.Exception as UnauthorizedAccessException;
 
-                var problemDetails = new ProblemDetails
-                {
-                    Status = (int)HttpStatusCode.Unauthorized,
-                    Detail = exception?.Message
-                };
-
-                context.Result = new UnauthorizedObjectResult(problemDetails);
+                context.Result = new UnauthorizedResult();
                 context.ExceptionHandled = true;
             }
         }

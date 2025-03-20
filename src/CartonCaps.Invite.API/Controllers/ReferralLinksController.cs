@@ -27,16 +27,19 @@ namespace CartonCaps.Invite.API.Controllers
             _userContextService = userContextService;
             _profileManagementApiClient = profileManagementApiClient;
         }
+
         /// <summary>
         /// Retrieves a referral link for the authenticated user.
         /// </summary>
         /// <param name="source">The referral source.</param>
         /// <returns>An IActionResult representing the referral link.</returns>
         /// <response code="200">Returns the referral link.</response>
+        /// <response code="400">Returned if the request is invalid (e.g., invalid referral source).</response>
         /// <response code="401">Returned if the user is unauthorized or if the user profile is not found.</response>
 
         [HttpGet]
         [ProducesResponseType(typeof(ReferralLink), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReferralLink), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetLink(ReferralSourceEnum source)
         {

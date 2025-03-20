@@ -41,10 +41,10 @@
 
             // Assert
             Assert.NotNull(context.Result);
-            Assert.IsType<UnauthorizedObjectResult>(context.Result);
+            Assert.IsType<UnauthorizedResult>(context.Result);
             Assert.True(context.ExceptionHandled);
 
-            var contentResult = (UnauthorizedObjectResult)context.Result;
+            var contentResult = (UnauthorizedResult)context.Result;
             Assert.Equal(401, contentResult.StatusCode);
             _mockLogger.ReceivedWithAnyArgs(1).LogWarning(exception, "test");
         }

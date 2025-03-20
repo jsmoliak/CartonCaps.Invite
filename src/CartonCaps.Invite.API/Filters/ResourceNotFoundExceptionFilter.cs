@@ -1,7 +1,6 @@
 ﻿using CartonCaps.Invite.Model.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
 
 namespace CartonCaps.Invite.API.Filters
 {
@@ -33,13 +32,7 @@ namespace CartonCaps.Invite.API.Filters
 
                 var exception = context.Exception as ResourceNotFoundException;
 
-                var problemDetails = new ProblemDetails
-                {
-                    Status = (int)HttpStatusCode.NotFound,
-                    Detail = exception?.Message
-                };
-
-                context.Result = new NotFoundObjectResult(problemDetails);
+                context.Result = new NotFoundResult();
                 context.ExceptionHandled = true;
             }
         }

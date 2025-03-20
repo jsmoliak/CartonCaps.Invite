@@ -41,10 +41,10 @@
 
             // Assert
             Assert.NotNull(context.Result);
-            Assert.IsType<NotFoundObjectResult>(context.Result);
+            Assert.IsType<NotFoundResult>(context.Result);
             Assert.True(context.ExceptionHandled);
 
-            var contentResult = (NotFoundObjectResult)context.Result;
+            var contentResult = (NotFoundResult)context.Result;
             Assert.Equal(404, contentResult.StatusCode);
             _mockLogger.ReceivedWithAnyArgs(1).LogWarning(exception, "test");
         }

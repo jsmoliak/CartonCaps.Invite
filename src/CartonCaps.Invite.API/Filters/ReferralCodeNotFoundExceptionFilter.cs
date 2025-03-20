@@ -29,14 +29,15 @@ namespace CartonCaps.Invite.API.Filters
         {
             if (context.Exception is ReferralCodeNotFoundException referralCodeNotFoundException)
             {
-                _logger.LogWarning(context.Exception, "A request was made with a referral code that does not exist.");
+                var message = "A request was made with a referral code that does not exist.";
+                _logger.LogWarning(context.Exception, message);
 
                 var error = new
                 {
                     type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
                     title = "No referrals exist with the provided referral code.",
                     status = 400,
-                    errors = referralCodeNotFoundException.Message,
+                    errors = message,
                     traceId = Activity.Current?.Id ?? context.HttpContext.TraceIdentifier
                 };
 

@@ -41,10 +41,10 @@
 
             // Assert
             Assert.NotNull(context.Result);
-            Assert.IsType<ConflictObjectResult>(context.Result);
+            Assert.IsType<ConflictResult>(context.Result);
             Assert.True(context.ExceptionHandled);
 
-            var contentResult = (ConflictObjectResult)context.Result;
+            var contentResult = (ConflictResult)context.Result;
             Assert.Equal(409, contentResult.StatusCode);
             _mockLogger.ReceivedWithAnyArgs(1).LogWarning(exception, "test");
         }
