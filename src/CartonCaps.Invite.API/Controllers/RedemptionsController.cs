@@ -37,7 +37,7 @@ namespace CartonCaps.Invite.API.Controllers
         /// <response code="401">Returned if the user is unauthorized.</response>
         /// <response code="404">Returned if the redemption is not found.</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(RedemptionRequest), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RedemptionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)

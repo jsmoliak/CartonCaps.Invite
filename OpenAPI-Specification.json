@@ -85,17 +85,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/RedemptionRequest"
+                  "$ref": "#/components/schemas/RedemptionResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RedemptionRequest"
+                  "$ref": "#/components/schemas/RedemptionResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RedemptionRequest"
+                  "$ref": "#/components/schemas/RedemptionResponse"
                 }
               }
             }
@@ -484,6 +484,35 @@
           },
           "referralSource": {
             "$ref": "#/components/schemas/ReferralSourceEnum"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RedemptionResponse": {
+        "required": [
+          "redeemedAt",
+          "redemptionId",
+          "referralCode",
+          "referralSource"
+        ],
+        "type": "object",
+        "properties": {
+          "redemptionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "referralCode": {
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[a-zA-Z0-9]+$",
+            "type": "string"
+          },
+          "referralSource": {
+            "$ref": "#/components/schemas/ReferralSourceEnum"
+          },
+          "redeemedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
