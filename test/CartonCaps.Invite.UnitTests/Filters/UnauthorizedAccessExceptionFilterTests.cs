@@ -6,18 +6,27 @@
     using Microsoft.AspNetCore.Mvc.Abstractions;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.Logging;
     using NSubstitute;
     using System;
     using Xunit;
 
     public class UnauthorizedAccessExceptionFilterTests
     {
+        private readonly ILogger<UnauthorizedAccessExceptionFilter> _mockLogger;
+
+        public UnauthorizedAccessExceptionFilterTests()
+        {
+            _mockLogger = Substitute.For<ILogger<UnauthorizedAccessExceptionFilter>>();
+
+        }
+
         // Tests that the OnException method handles UnauthorizedAccessException by setting the result to an UnauthorizedObjectResult.
         [Fact]
         public void OnException_UnauthorizedAccessException_Should_Set_Result()
         {
             // Arrange
-            var filter = new UnauthorizedAccessExceptionFilter();
+            var filter = new UnauthorizedAccessExceptionFilter(_mockLogger);
             var exception = new UnauthorizedAccessException("Test argument exception message");
             var httpContext = Substitute.For<HttpContext>();
             var routeData = new RouteData();
@@ -37,6 +46,7 @@
 
             var contentResult = (UnauthorizedObjectResult)context.Result;
             Assert.Equal(401, contentResult.StatusCode);
+            _mockLogger.ReceivedWithAnyArgs(1).LogWarning(exception, "test");
         }
 
         // Tests that the OnException method does not handle non-UnauthorizedAccessException exceptions.
@@ -44,7 +54,7 @@
         public void OnException_NonUnauthorizedAccessException_Should_Not_Set_Result()
         {
             // Arrange
-            var filter = new UnauthorizedAccessExceptionFilter();
+            var filter = new UnauthorizedAccessExceptionFilter(_mockLogger);
             var exception = new Exception("Test exception message");
             var httpContext = Substitute.For<HttpContext>();
             var routeData = new RouteData();
@@ -57,6 +67,7 @@
 
             // Assert
             Assert.False(context.ExceptionHandled);
+            _mockLogger.ReceivedWithAnyArgs(0).LogWarning(exception, "test");
         }
     }
 }

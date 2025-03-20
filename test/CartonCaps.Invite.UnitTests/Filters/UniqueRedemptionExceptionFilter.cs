@@ -7,18 +7,26 @@
     using Microsoft.AspNetCore.Mvc.Abstractions;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.Logging;
     using NSubstitute;
     using System;
     using Xunit;
 
     public class UniqueRedemptionExceptionFilterTests
     {
+        private readonly ILogger<UniqueRedemptionExceptionFilter> _mockLogger;
+
+        public UniqueRedemptionExceptionFilterTests()
+        {
+            _mockLogger = Substitute.For<ILogger<UniqueRedemptionExceptionFilter>>();
+        }
+
         // Tests that the OnException method handles UniqueRedemptionConstraintException by setting the result to a ConflictObjectResult.
         [Fact]
         public void OnException_UniqueRedemptionException_Should_Set_Result()
         {
             // Arrange
-            var filter = new UniqueRedemptionExceptionFilter();
+            var filter = new UniqueRedemptionExceptionFilter(_mockLogger);
             var exception = new UniqueRedemptionConstraintException("Test argument exception message");
             var httpContext = Substitute.For<HttpContext>();
             var routeData = new RouteData();
@@ -38,6 +46,7 @@
 
             var contentResult = (ConflictObjectResult)context.Result;
             Assert.Equal(409, contentResult.StatusCode);
+            _mockLogger.ReceivedWithAnyArgs(1).LogWarning(exception, "test");
         }
 
         // Tests that the OnException method does not handle non-UniqueRedemptionConstraintException exceptions.
@@ -45,7 +54,7 @@
         public void OnException_NonUniqueRedemptionException_Should_Not_Set_Result()
         {
             // Arrange
-            var filter = new UniqueRedemptionExceptionFilter();
+            var filter = new UniqueRedemptionExceptionFilter(_mockLogger);
             var exception = new Exception("Test exception message");
             var httpContext = Substitute.For<HttpContext>();
             var routeData = new RouteData();
@@ -58,6 +67,7 @@
 
             // Assert
             Assert.False(context.ExceptionHandled);
+            _mockLogger.ReceivedWithAnyArgs(0).LogWarning(exception, "test");
         }
     }
 }

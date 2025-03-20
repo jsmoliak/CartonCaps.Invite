@@ -7,18 +7,26 @@
     using Microsoft.AspNetCore.Mvc.Abstractions;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.Logging;
     using NSubstitute;
     using System;
     using Xunit;
 
     public class ResourceNotFoundExceptionFilterTests
     {
+        private readonly ILogger<ResourceNotFoundExceptionFilter> _mockLogger;
+
+        public ResourceNotFoundExceptionFilterTests()
+        {
+            _mockLogger = Substitute.For<ILogger<ResourceNotFoundExceptionFilter>>();
+        }
+
         // Tests that the OnException method handles ResourceNotFoundException by setting the result to a NotFoundObjectResult.
         [Fact]
         public void OnException_ResourceNotFoundException_Should_Set_Result()
         {
             // Arrange
-            var filter = new ResourceNotFoundExceptionFilter();
+            var filter = new ResourceNotFoundExceptionFilter(_mockLogger);
             var exception = new ResourceNotFoundException("Test argument exception message");
             var httpContext = Substitute.For<HttpContext>();
             var routeData = new RouteData();
@@ -38,6 +46,7 @@
 
             var contentResult = (NotFoundObjectResult)context.Result;
             Assert.Equal(404, contentResult.StatusCode);
+            _mockLogger.ReceivedWithAnyArgs(1).LogWarning(exception, "test");
         }
 
         // Tests that the OnException method does not handle non-ResourceNotFoundException exceptions.
@@ -45,7 +54,7 @@
         public void OnException_NonResourceNotFoundException_Should_Not_Set_Result()
         {
             // Arrange
-            var filter = new ResourceNotFoundExceptionFilter();
+            var filter = new ResourceNotFoundExceptionFilter(_mockLogger);
             var exception = new Exception("Test exception message");
             var httpContext = Substitute.For<HttpContext>();
             var routeData = new RouteData();
@@ -58,6 +67,7 @@
 
             // Assert
             Assert.False(context.ExceptionHandled);
+            _mockLogger.ReceivedWithAnyArgs(0).LogWarning(exception, "test");
         }
     }
 }

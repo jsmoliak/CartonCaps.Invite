@@ -83,7 +83,6 @@ namespace CartonCaps.Invite.API.Services
             User referrer = new User(authId);
             referrer.ReferralCode = new ReferralCode(referralFromRequest.ReferralCode, referrer.UserId);
             await _usersRepository.AddAsync(referrer, cancellationToken);
-            await _usersRepository.SaveChangesAsync(cancellationToken);
             return referrer;
         }
     }
